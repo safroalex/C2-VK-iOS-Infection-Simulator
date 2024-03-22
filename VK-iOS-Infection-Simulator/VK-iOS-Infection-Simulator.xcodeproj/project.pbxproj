@@ -7,9 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F0DF0652BAE2AD300689E05 /* VirusSpreadSimulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0DF0642BAE2AD300689E05 /* VirusSpreadSimulator.swift */; };
+		1F0DF0672BAE2B8700689E05 /* ParametersInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0DF0662BAE2B8700689E05 /* ParametersInputViewController.swift */; };
+		1F0DF0692BAE2B9A00689E05 /* SimulationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0DF0682BAE2B9A00689E05 /* SimulationViewController.swift */; };
+		1F0DF06B2BAE2C0400689E05 /* VirusSpreadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0DF06A2BAE2C0400689E05 /* VirusSpreadViewModel.swift */; };
 		1FABE1CC2BAD9B3C0091C4BE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FABE1CB2BAD9B3C0091C4BE /* AppDelegate.swift */; };
 		1FABE1CE2BAD9B3C0091C4BE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FABE1CD2BAD9B3C0091C4BE /* SceneDelegate.swift */; };
-		1FABE1D02BAD9B3C0091C4BE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FABE1CF2BAD9B3C0091C4BE /* ViewController.swift */; };
 		1FABE1D52BAD9B3D0091C4BE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FABE1D42BAD9B3D0091C4BE /* Assets.xcassets */; };
 		1FABE1D82BAD9B3D0091C4BE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FABE1D62BAD9B3D0091C4BE /* LaunchScreen.storyboard */; };
 		1FABE1E32BAD9B3D0091C4BE /* VK_iOS_Infection_SimulatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FABE1E22BAD9B3D0091C4BE /* VK_iOS_Infection_SimulatorTests.swift */; };
@@ -35,10 +38,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1F0DF0642BAE2AD300689E05 /* VirusSpreadSimulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirusSpreadSimulator.swift; sourceTree = "<group>"; };
+		1F0DF0662BAE2B8700689E05 /* ParametersInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersInputViewController.swift; sourceTree = "<group>"; };
+		1F0DF0682BAE2B9A00689E05 /* SimulationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationViewController.swift; sourceTree = "<group>"; };
+		1F0DF06A2BAE2C0400689E05 /* VirusSpreadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirusSpreadViewModel.swift; sourceTree = "<group>"; };
 		1FABE1C82BAD9B3C0091C4BE /* VK-iOS-Infection-Simulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "VK-iOS-Infection-Simulator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FABE1CB2BAD9B3C0091C4BE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1FABE1CD2BAD9B3C0091C4BE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		1FABE1CF2BAD9B3C0091C4BE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		1FABE1D42BAD9B3D0091C4BE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1FABE1D72BAD9B3D0091C4BE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1FABE1D92BAD9B3D0091C4BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -99,10 +105,13 @@
 			children = (
 				1FABE1CB2BAD9B3C0091C4BE /* AppDelegate.swift */,
 				1FABE1CD2BAD9B3C0091C4BE /* SceneDelegate.swift */,
-				1FABE1CF2BAD9B3C0091C4BE /* ViewController.swift */,
 				1FABE1D42BAD9B3D0091C4BE /* Assets.xcassets */,
 				1FABE1D62BAD9B3D0091C4BE /* LaunchScreen.storyboard */,
 				1FABE1D92BAD9B3D0091C4BE /* Info.plist */,
+				1F0DF0642BAE2AD300689E05 /* VirusSpreadSimulator.swift */,
+				1F0DF0662BAE2B8700689E05 /* ParametersInputViewController.swift */,
+				1F0DF0682BAE2B9A00689E05 /* SimulationViewController.swift */,
+				1F0DF06A2BAE2C0400689E05 /* VirusSpreadViewModel.swift */,
 			);
 			path = "VK-iOS-Infection-Simulator";
 			sourceTree = "<group>";
@@ -254,7 +263,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1FABE1D02BAD9B3C0091C4BE /* ViewController.swift in Sources */,
+				1F0DF06B2BAE2C0400689E05 /* VirusSpreadViewModel.swift in Sources */,
+				1F0DF0672BAE2B8700689E05 /* ParametersInputViewController.swift in Sources */,
+				1F0DF0652BAE2AD300689E05 /* VirusSpreadSimulator.swift in Sources */,
+				1F0DF0692BAE2B9A00689E05 /* SimulationViewController.swift in Sources */,
 				1FABE1CC2BAD9B3C0091C4BE /* AppDelegate.swift in Sources */,
 				1FABE1CE2BAD9B3C0091C4BE /* SceneDelegate.swift in Sources */,
 			);
@@ -430,6 +442,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N7XJX2A68H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "VK-iOS-Infection-Simulator/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -456,6 +469,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N7XJX2A68H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "VK-iOS-Infection-Simulator/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
