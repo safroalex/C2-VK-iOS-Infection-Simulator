@@ -13,30 +13,37 @@ class VirusSpreadViewModel: ObservableObject {
     
     private var simulator: VirusSpreadSimulator?
     private var subscriptions = Set<AnyCancellable>()
+    private var frequency: TimeInterval = 1.0 // Значение по умолчанию
+    var personStatusChanged = PassthroughSubject<UUID, Never>()
     
     func setupSimulation(groupSize: Int, infectionFactor: Int, frequency: TimeInterval) {
+        self.frequency = frequency // Сохраняем значение частоты
         simulator = VirusSpreadSimulator(groupSize: groupSize, infectionFactor: infectionFactor)
         simulator?.$people
             .receive(on: RunLoop.main)
             .assign(to: &$people)
-        
-        // Пример подписки на изменение статуса симуляции
-        // Это может быть полезно, если логика вашей симуляции подразумевает изменение этого статуса
     }
+    
     
     func startSimulation() {
         guard let simulator = simulator, !isSimulationRunning else { return }
         isSimulationRunning = true
-        simulator.startSimulation(frequency: 1.0) // Установите желаемую частоту обновления
-        
-        // Добавьте необходимую логику для остановки симуляции и обновления isSimulationRunning
+        simulator.startSimulation(frequency: frequency) // Используем сохранённое значение частоты
     }
     
+    
     func toggleInfectionStatus(for personID: UUID) {
-        guard let index = people.firstIndex(where: { $0.id == personID }) else { return }
-        people[index].isInfected.toggle()
-        // Важно: если вы используете @Published для people, Combine автоматически уведомит об изменении.
-        // Если нет, вам может понадобиться вручную вызвать обновление представления.
+        DispatchQueue.global(qos: .userInitiated).async {
+            if let index = self.people.firstIndex(where: { $0.id == personID }), !self.people[index].isInfected {
+                // Заражаем только если человек был здоров
+                print("Infecting person at index: \(index), personID: \(personID)")
+                self.people[index].isInfected = true
+                
+                DispatchQueue.main.async {
+                    print("Sending personStatusChanged for personID: \(personID)")
+                    self.personStatusChanged.send(personID)
+                }
+            }
+        }
     }
-
 }

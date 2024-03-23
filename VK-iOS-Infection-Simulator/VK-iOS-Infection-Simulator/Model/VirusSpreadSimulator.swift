@@ -20,8 +20,9 @@ class VirusSpreadSimulator {
     
     init(groupSize: Int, infectionFactor: Int) {
         self.infectionFactor = infectionFactor
-        self.people = Array(repeating: Person(isInfected: false), count: groupSize)
+        self.people = (0..<groupSize).map { _ in Person(isInfected: false) }
     }
+
     
     func startSimulation(frequency: TimeInterval) {
         // Здесь должна быть логика симуляции
