@@ -80,6 +80,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1F0DF06C2BAEE22500689E05 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1F0DF0642BAE2AD300689E05 /* VirusSpreadSimulator.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		1F0DF06D2BAEE22B00689E05 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1F0DF0682BAE2B9A00689E05 /* SimulationViewController.swift */,
+				1F0DF0662BAE2B8700689E05 /* ParametersInputViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		1F0DF06E2BAEE22F00689E05 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				1F0DF06A2BAE2C0400689E05 /* VirusSpreadViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		1FABE1BF2BAD9B3C0091C4BE = {
 			isa = PBXGroup;
 			children = (
@@ -105,13 +130,12 @@
 			children = (
 				1FABE1CB2BAD9B3C0091C4BE /* AppDelegate.swift */,
 				1FABE1CD2BAD9B3C0091C4BE /* SceneDelegate.swift */,
+				1F0DF06C2BAEE22500689E05 /* Model */,
+				1F0DF06D2BAEE22B00689E05 /* View */,
+				1F0DF06E2BAEE22F00689E05 /* ViewModel */,
 				1FABE1D42BAD9B3D0091C4BE /* Assets.xcassets */,
 				1FABE1D62BAD9B3D0091C4BE /* LaunchScreen.storyboard */,
 				1FABE1D92BAD9B3D0091C4BE /* Info.plist */,
-				1F0DF0642BAE2AD300689E05 /* VirusSpreadSimulator.swift */,
-				1F0DF0662BAE2B8700689E05 /* ParametersInputViewController.swift */,
-				1F0DF0682BAE2B9A00689E05 /* SimulationViewController.swift */,
-				1F0DF06A2BAE2C0400689E05 /* VirusSpreadViewModel.swift */,
 			);
 			path = "VK-iOS-Infection-Simulator";
 			sourceTree = "<group>";

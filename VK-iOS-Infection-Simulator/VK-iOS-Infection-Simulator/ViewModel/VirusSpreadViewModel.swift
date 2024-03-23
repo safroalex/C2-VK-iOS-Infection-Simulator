@@ -33,6 +33,10 @@ class VirusSpreadViewModel: ObservableObject {
     }
     
     func toggleInfectionStatus(for personID: UUID) {
-        simulator?.toggleInfectionStatus(for: personID)
+        guard let index = people.firstIndex(where: { $0.id == personID }) else { return }
+        people[index].isInfected.toggle()
+        // Важно: если вы используете @Published для people, Combine автоматически уведомит об изменении.
+        // Если нет, вам может понадобиться вручную вызвать обновление представления.
     }
+
 }

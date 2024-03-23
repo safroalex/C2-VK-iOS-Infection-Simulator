@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 class ParametersInputViewController: UIViewController {
-    private var viewModel: VirusSpreadViewModel!
+    private var viewModel: VirusSpreadViewModel = VirusSpreadViewModel()
     private var subscriptions = Set<AnyCancellable>()
     
     private let groupSizeTextField = UITextField()

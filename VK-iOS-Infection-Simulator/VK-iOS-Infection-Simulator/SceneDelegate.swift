@@ -14,10 +14,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
+        let parametersViewController = ParametersInputViewController()
+        let navigationController = UINavigationController(rootViewController: parametersViewController) // Обёртка в UINavigationController
+        
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = ParametersInputViewController() // Установка ViewController как корневого контроллера
+        window?.rootViewController = navigationController // Использование UINavigationController как корневого контроллера
         window?.makeKeyAndVisible()
     }
 }
+
 
 

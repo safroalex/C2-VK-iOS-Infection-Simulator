@@ -20,12 +20,15 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
         setupBindings()
     }
     
+    
+    
     private func setupLayout() {
         view.backgroundColor = .white // Для наглядности
         
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 100, height: 100) // Пример размера ячейки
-        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10) // Отступы секции
+        layout.itemSize = CGSize(width: 50, height: 50) // Меньший размер ячейки
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+
         
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight] // Автоподгонка размера
@@ -52,22 +55,24 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
         self.viewModel = viewModel
     }
     
-    // MARK: - UICollectionViewDataSource
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.people.count
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let person = viewModel.people[indexPath.item]
+        viewModel.toggleInfectionStatus(for: person.id)
+    }
+
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        cell.layer.cornerRadius = 25 // Половина размера ячейки
+        cell.layer.masksToBounds = true
         cell.backgroundColor = viewModel.people[indexPath.item].isInfected ? .red : .green // Пример визуализации
         return cell
     }
-    
-    // MARK: - UICollectionViewDelegate
-    // Здесь можно добавить методы делегата, если они вам нужны
-    
-    // Функция настройки viewModel (уже определена выше)
+
 }
 
 
