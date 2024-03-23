@@ -13,7 +13,9 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
     private var subscriptions = Set<AnyCancellable>()
     
     private var collectionView: UICollectionView!
-    
+    private let healthyLabel = UILabel()
+    private let infectedLabel = UILabel()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
@@ -44,6 +46,26 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handleSwipeSelection(_:)))
         panGesture.maximumNumberOfTouches = 1 // Максимальное количество касаний
         collectionView.addGestureRecognizer(panGesture)
+        
+        
+        healthyLabel.translatesAutoresizingMaskIntoConstraints = false
+        infectedLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(healthyLabel)
+        view.addSubview(infectedLabel)
+        
+        // Настройка констрейнтов
+        NSLayoutConstraint.activate([
+            healthyLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            healthyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            
+            infectedLabel.topAnchor.constraint(equalTo: healthyLabel.bottomAnchor, constant: 10),
+            infectedLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
+        ])
+        
+        // Начальные значения
+        healthyLabel.text = "Здоровых: 0"
+        infectedLabel.text = "Зараженных: 0"
 
     }
     
@@ -64,6 +86,14 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
                     print("Correcting indexPath to: \(indexPathToUpdate) for personID: \(personID)")
                     self.collectionView.reloadItems(at: [indexPathToUpdate])
                 }
+            }
+            .store(in: &subscriptions)
+        
+        viewModel.statisticsUpdated
+            .receive(on: RunLoop.main)
+            .sink { [weak self] healthyCount, infectedCount in
+                // Обновление лейблов с количеством здоровых и больных
+                self?.updateLabels(healthyCount: healthyCount, infectedCount: infectedCount)
             }
             .store(in: &subscriptions)
     }
@@ -115,6 +145,13 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
     func updateCollectionView(forModifiedIndexPath indexPath: IndexPath) {
         collectionView.reloadItems(at: [indexPath])
     }
+    
+    func updateLabels(healthyCount: Int, infectedCount: Int) {
+        healthyLabel.text = "Здоровых: \(healthyCount)"
+        infectedLabel.text = "Зараженных: \(infectedCount)"
+    }
+
+
 }
 
 

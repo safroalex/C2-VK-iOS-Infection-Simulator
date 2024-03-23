@@ -32,6 +32,19 @@ class VirusSpreadSimulator {
         guard let index = people.firstIndex(where: { $0.id == personID }) else { return }
         people[index].isInfected.toggle()
     }
+    
+    func calculateStatistics(completion: @escaping (_ healthyCount: Int, _ infectedCount: Int) -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            let infectedCount = self.people.filter { $0.isInfected }.count
+            let healthyCount = self.people.count - infectedCount
+            
+            DispatchQueue.main.async {
+                completion(healthyCount, infectedCount)
+            }
+        }
+    }
+
 }
 
 

@@ -15,6 +15,7 @@ class VirusSpreadViewModel: ObservableObject {
     private var subscriptions = Set<AnyCancellable>()
     private var frequency: TimeInterval = 1.0 // Значение по умолчанию
     var personStatusChanged = PassthroughSubject<UUID, Never>()
+    var statisticsUpdated = PassthroughSubject<(healthyCount: Int, infectedCount: Int), Never>()
     
     func setupSimulation(groupSize: Int, infectionFactor: Int, frequency: TimeInterval) {
         self.frequency = frequency // Сохраняем значение частоты
@@ -28,8 +29,14 @@ class VirusSpreadViewModel: ObservableObject {
     func startSimulation() {
         guard let simulator = simulator, !isSimulationRunning else { return }
         isSimulationRunning = true
-        simulator.startSimulation(frequency: frequency) // Используем сохранённое значение частоты
+        simulator.startSimulation(frequency: frequency) // Запуск симуляции с сохраненной частотой
+        
+        // Запуск таймера для регулярного обновления статистики
+        Timer.scheduledTimer(withTimeInterval: frequency, repeats: true) { [weak self] _ in
+            self?.updateStatistics()
+        }
     }
+
     
     
     func toggleInfectionStatus(for personID: UUID) {
@@ -43,6 +50,20 @@ class VirusSpreadViewModel: ObservableObject {
                     print("Sending personStatusChanged for personID: \(personID)")
                     self.personStatusChanged.send(personID)
                 }
+            }
+        }
+    }
+    
+    func updateStatistics() {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            
+            let healthyCount = self.people.filter { !$0.isInfected }.count
+            let infectedCount = self.people.count - healthyCount
+            
+            DispatchQueue.main.async {
+                // Отправляем обновленную статистику в главный поток
+                self.statisticsUpdated.send((healthyCount, infectedCount))
             }
         }
     }

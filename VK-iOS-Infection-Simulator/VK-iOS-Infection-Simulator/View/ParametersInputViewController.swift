@@ -56,8 +56,7 @@ class ParametersInputViewController: UIViewController {
     
     private func setupBindings() {
         startSimulationButton.addTarget(self, action: #selector(startSimulationTapped), for: .touchUpInside)
-        
-        // Если потребуется, здесь можно добавить дополнительные привязки с Combine
+    
     }
     
     @objc private func startSimulationTapped() {

@@ -91,8 +91,8 @@
 		1F0DF06D2BAEE22B00689E05 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				1F0DF0682BAE2B9A00689E05 /* SimulationViewController.swift */,
 				1F0DF0662BAE2B8700689E05 /* ParametersInputViewController.swift */,
+				1F0DF0682BAE2B9A00689E05 /* SimulationViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
