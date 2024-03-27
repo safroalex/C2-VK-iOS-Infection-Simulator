@@ -11,7 +11,7 @@ import Combine
 class SimulationViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     private var viewModel: VirusSpreadViewModel!
     private var subscriptions = Set<AnyCancellable>()
-    
+    private var labelsStackView: UIStackView!
     private var collectionView: UICollectionView!
     private let healthyLabel = UILabel()
     private let infectedLabel = UILabel()
@@ -29,7 +29,7 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
         view.backgroundColor = .systemBackground // Для наглядности
         
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 50, height: 50) // Меньший размер ячейки
+        layout.itemSize = CGSize(width: 25, height: 25) // Меньший размер ячейки
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 
         
@@ -59,19 +59,21 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
         stopSimulationButton.layer.cornerRadius = 10
         stopSimulationButton.translatesAutoresizingMaskIntoConstraints = false
         stopSimulationButton.addTarget(self, action: #selector(stopSimulationTapped), for: .touchUpInside)
+       
+        styleLabel(healthyLabel)
+        styleLabel(infectedLabel)
         
         view.addSubview(stopSimulationButton)
         view.addSubview(healthyLabel)
         view.addSubview(infectedLabel)
         
-        // Настройка констрейнтов
-        NSLayoutConstraint.activate([
-            healthyLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            healthyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            
-            infectedLabel.topAnchor.constraint(equalTo: healthyLabel.bottomAnchor, constant: 10),
-            infectedLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
-        ])
+        labelsStackView = UIStackView(arrangedSubviews: [healthyLabel, infectedLabel])
+        labelsStackView.axis = .horizontal
+        labelsStackView.distribution = .fillEqually
+        labelsStackView.spacing = 10
+        labelsStackView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(labelsStackView)
+        
         
         NSLayoutConstraint.activate([
             stopSimulationButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -79,6 +81,17 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
             stopSimulationButton.widthAnchor.constraint(equalToConstant: 200),
             stopSimulationButton.heightAnchor.constraint(equalToConstant: 50)
         ])
+        
+        NSLayoutConstraint.activate([
+            // Здоровые слева
+            healthyLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            healthyLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+
+            // Зараженные справа
+            infectedLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            infectedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+        ])
+
         
         // Начальные значения
         healthyLabel.text = "Здоровых: 0"
@@ -139,7 +152,7 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        cell.layer.cornerRadius = 25 // Половина размера ячейки
+        cell.layer.cornerRadius = 10
         cell.layer.masksToBounds = true
         cell.backgroundColor = viewModel.people[indexPath.item].isInfected ? .red : .green // Пример визуализации
         return cell
@@ -201,6 +214,20 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
     func stopSimulation() {
         viewModel.stopSimulation()
     }
+    
+    private func styleLabel(_ label: UILabel) {
+        label.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.8) // Прозрачность фона
+        label.textColor = .white
+        label.textAlignment = .center
+        label.layer.cornerRadius = 10 // Скругление углов
+        label.layer.masksToBounds = true
+        label.font = UIFont.systemFont(ofSize: 18, weight: .medium) // Шрифт покрупнее
+        // Установка фиксированных размеров для меток
+        label.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        label.heightAnchor.constraint(equalToConstant: 40).isActive = true
+    }
+
+
 
 }
 
