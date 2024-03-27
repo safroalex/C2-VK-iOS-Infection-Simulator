@@ -36,6 +36,7 @@ class VirusSpreadViewModel: ObservableObject {
     
     
     func startSimulation() {
+        print("Симуляция началась в VirusSpreadViewModel")
         guard let simulator = simulator, !isSimulationRunning else { return }
         isSimulationRunning = true
         simulator.startSimulation(frequency: frequency) // Запуск симуляции с сохраненной частотой
@@ -50,18 +51,23 @@ class VirusSpreadViewModel: ObservableObject {
     
     func toggleInfectionStatus(for personID: UUID) {
         DispatchQueue.global(qos: .userInitiated).async {
-            if let index = self.people.firstIndex(where: { $0.id == personID }), !self.people[index].isInfected {
+            // Поиск индекса зараженного человека в ViewModel
+            if let index = self.people.firstIndex(where: { $0.id == personID }) {
                 // Заражаем только если человек был здоров
-                print("Infecting person at index: \(index), personID: \(personID)")
-                self.people[index].isInfected = true
-                
-                DispatchQueue.main.async {
-                    print("Sending personStatusChanged for personID: \(personID)")
-                    self.personStatusChanged.send(personID)
+                if !self.people[index].isInfected {
+                    print("Infecting person at index: \(index), personID: \(personID)")
+                    self.people[index].isInfected = true
+                    
+                    // Отправляем информацию о заражении в Simulator
+                    DispatchQueue.main.async {
+                        self.simulator?.toggleInfectionStatus(for: personID)
+                        print("VirusSpreadViewModel знает о зараженном \(personID)")
+                    }
                 }
             }
         }
     }
+
     
     func updateStatistics() {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in

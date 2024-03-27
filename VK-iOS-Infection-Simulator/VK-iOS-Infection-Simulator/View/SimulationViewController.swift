@@ -123,6 +123,8 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
         return cell
     }
     
+
+    
     @objc private func handleSwipeSelection(_ gesture: UIPanGestureRecognizer) {
         let location = gesture.location(in: collectionView)
         
