@@ -16,7 +16,7 @@ struct Person {
 /// Класс для симуляции распространения вируса среди группы людей.
 class VirusSpreadSimulator {
     @Published var people: [Person] = []
-    
+
     private var infectionFactor: Int
     private var timer: Timer?
     private var frequency: TimeInterval = 1.0

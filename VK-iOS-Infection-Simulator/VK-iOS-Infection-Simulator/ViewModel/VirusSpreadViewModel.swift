@@ -12,7 +12,7 @@ class VirusSpreadViewModel: ObservableObject {
     @Published var people: [Person] = []
     @Published var isSimulationRunning: Bool = false
     @Published var itemsPerRow: Int = 0
-    
+
     private var simulator: VirusSpreadSimulator?
     private var subscriptions = Set<AnyCancellable>()
     private var frequency: TimeInterval = 1.0
@@ -63,7 +63,7 @@ class VirusSpreadViewModel: ObservableObject {
     func stopSimulation() {
         simulator?.stopSimulation()
         isSimulationRunning = false
-    }    
+    }
     
     /// Переключает статус заражения для указанного человека.
     /// - Parameter personID: Идентификатор человека.

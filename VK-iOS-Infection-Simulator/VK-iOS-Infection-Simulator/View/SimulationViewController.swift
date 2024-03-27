@@ -18,7 +18,7 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
     private let healthyLabel = UILabel()
     private let infectedLabel = UILabel()
     private let stopSimulationButton = UIButton(type: .system)
-    
+
     // MARK: - Lifecycle Methods
     
     /// Вызывается после загрузки представления контроллера.
@@ -77,8 +77,7 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
         labelsStackView.spacing = 10
         labelsStackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(labelsStackView)
-        
-        
+
         NSLayoutConstraint.activate([
             stopSimulationButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             stopSimulationButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),

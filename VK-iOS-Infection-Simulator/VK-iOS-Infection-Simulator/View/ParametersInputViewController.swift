@@ -13,7 +13,7 @@ class ParametersInputViewController: UIViewController {
     // MARK: - Private Properties
     private var viewModel: VirusSpreadViewModel = VirusSpreadViewModel()
     private var subscriptions = Set<AnyCancellable>()
-    
+
     // UI-элементы для ввода пользовательских данных.
     private let groupSizeTextField = UITextField()
     private let infectionFactorTextField = UITextField()
@@ -68,7 +68,7 @@ class ParametersInputViewController: UIViewController {
             shouldMoveViewUp = true
         }
 
-        if(shouldMoveViewUp) {
+        if (shouldMoveViewUp) {
             self.view.frame.origin.y = 0 - keyboardSize.height
         }
     }
