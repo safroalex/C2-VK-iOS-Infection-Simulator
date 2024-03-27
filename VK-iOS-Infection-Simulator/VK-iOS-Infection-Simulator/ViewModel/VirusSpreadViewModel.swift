@@ -19,7 +19,7 @@ class VirusSpreadViewModel: ObservableObject {
 
     /// Публикует изменения статуса заражения конкретного человека.
     var personStatusChanged = PassthroughSubject<UUID, Never>()
-    
+
     /// Публикует обновленную статистику здоровых и зараженных людей.
     var statisticsUpdated = PassthroughSubject<(healthyCount: Int, infectedCount: Int), Never>()
     

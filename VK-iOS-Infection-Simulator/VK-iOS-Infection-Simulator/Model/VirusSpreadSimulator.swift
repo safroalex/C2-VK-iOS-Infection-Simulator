@@ -32,7 +32,7 @@ class VirusSpreadSimulator {
     }
 
     // MARK: - Симуляция
-    
+
     /// Запускает симуляцию распространения вируса.
     /// - Parameter frequency: Частота обновления состояния симуляции.
     func startSimulation(frequency: TimeInterval) {

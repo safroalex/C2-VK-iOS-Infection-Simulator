@@ -21,7 +21,7 @@ class ParametersInputViewController: UIViewController {
     private let startSimulationButton = UIButton(type: .system)
 
     // MARK: - Lifecycle Methods
-    
+
     /// Вызывается после загрузки представления контроллера.
     override func viewDidLoad() {
         super.viewDidLoad()

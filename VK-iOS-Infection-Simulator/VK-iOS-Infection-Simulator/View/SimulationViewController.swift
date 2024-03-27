@@ -27,7 +27,7 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
         setupLayout()
         setupBindings()
     }
-    
+
     // MARK: - Setup Methods
     
     /// Настраивает макет и внешний вид элементов управления на экране.
