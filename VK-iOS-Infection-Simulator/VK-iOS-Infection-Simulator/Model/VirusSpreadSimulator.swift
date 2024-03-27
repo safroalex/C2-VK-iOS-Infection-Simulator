@@ -38,31 +38,52 @@ class VirusSpreadSimulator {
     }
 
     func spreadInfection() {
-        print("Метод вызван")
+        guard let itemsPerRow = self.currentItemsPerRow else { return }
         var newInfections: [Int] = []
+
         for (index, person) in people.enumerated() {
             guard person.isInfected else { continue }
-
-            // Попытка заразить предыдущего человека в массиве, если он существует и не заражен
-            if index > 0 && !people[index - 1].isInfected {
-                newInfections.append(index - 1)
-                print("Заражен человек на позиции \(index - 1) от человека на позиции \(index)")
-            }
-
-            // Попытка заразить следующего человека в массиве, если он существует и не заражен
-            if index < people.count - 1 && !people[index + 1].isInfected {
-                newInfections.append(index + 1)
-                print("Заражен человек на позиции \(index + 1) от человека на позиции \(index)")
+            
+            // Определяем индексы соседей
+            let neighborsIndexes = getNeighborsIndex(for: index, in: itemsPerRow)
+            
+            // Фильтруем, чтобы заразить только незараженных соседей
+            let infectableNeighbors = neighborsIndexes.filter { !people[$0].isInfected }
+            
+            // Выбираем случайное количество соседей для заражения, не превышающее infectionFactor
+            for i in infectableNeighbors.shuffled().prefix(infectionFactor) {
+                newInfections.append(i)
             }
         }
 
         // Заражаем новых людей
         for index in newInfections {
             people[index].isInfected = true
-            print("Человек на позиции \(index) теперь заражен.")
         }
-
-        // После обновления статусов заражения можно вызвать calculateStatistics или другой метод для обновления UI
+    }
+    
+    private func getNeighborsIndex(for index: Int, in itemsPerRow: Int) -> [Int] {
+        let totalItems = people.count
+        let row = index / itemsPerRow
+        let column = index % itemsPerRow
+        
+        var neighbors: [Int] = []
+        for i in -1...1 {
+            for j in -1...1 {
+                if i == 0 && j == 0 { continue } // Пропускаем сам элемент
+                
+                let neighborRow = row + i
+                let neighborColumn = column + j
+                if neighborRow >= 0 && neighborRow < (totalItems / itemsPerRow) &&
+                    neighborColumn >= 0 && neighborColumn < itemsPerRow {
+                    let neighborIndex = neighborRow * itemsPerRow + neighborColumn
+                    if neighborIndex >= 0 && neighborIndex < totalItems {
+                        neighbors.append(neighborIndex)
+                    }
+                }
+            }
+        }
+        return neighbors
     }
 
 
@@ -97,15 +118,12 @@ class VirusSpreadSimulator {
     func updateLayout(itemsPerRow: Int) {
         print("Кол-во элементов в строке: \(itemsPerRow)")
         self.currentItemsPerRow = itemsPerRow // Сохраняем текущее значение
-        // Немедленное использование нового значения для расчёта заражений
-//        spreadInfection(itemsPerRow: itemsPerRow)
     }
 
     
     func stopSimulation() {
         timer?.invalidate()
         timer = nil
-        // Любые дополнительные действия по остановке симуляции
     }
 
 }
