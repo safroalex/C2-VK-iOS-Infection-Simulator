@@ -44,7 +44,11 @@ class VirusSpreadSimulator {
             }
         }
     }
-
+    
+    func updateLayout(itemsPerRow: Int) {
+        // Логика обновления с учетом нового количества элементов в строке
+        print("Кол во строк из VirusSpreadSimulator: \(itemsPerRow)")
+    }
 }
 
 

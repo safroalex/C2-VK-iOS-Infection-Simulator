@@ -25,7 +25,7 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
     
     
     private func setupLayout() {
-        view.backgroundColor = .white // Для наглядности
+        view.backgroundColor = .systemBackground // Для наглядности
         
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 50, height: 50) // Меньший размер ячейки
@@ -34,7 +34,7 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
         
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight] // Автоподгонка размера
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .systemBackground
         collectionView.dataSource = self
         collectionView.delegate = self
         
@@ -129,7 +129,8 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
         switch gesture.state {
         case .began, .changed:
             guard let indexPath = collectionView.indexPathForItem(at: location),
-                  let cell = collectionView.cellForItem(at: indexPath) as? UICollectionViewCell else { return }
+                let cell = collectionView.cellForItem(at: indexPath) else { return }
+
             
             // Изменение состояния выбранной ячейки, если это необходимо
             let personID = viewModel.people[indexPath.row].id
@@ -151,6 +152,27 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
         infectedLabel.text = "Зараженных: \(infectedCount)"
     }
 
+    func recalculateItemsPerRow() {
+        guard let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+        let totalWidth = collectionView.bounds.size.width
+        let itemWidth = layout.itemSize.width
+        let spacing = layout.minimumInteritemSpacing
+
+        // Для более точного расчёта учитываем отступы слева и справа
+        let insets = layout.sectionInset.left + layout.sectionInset.right
+
+        // Вычисляем количество элементов в строке
+        let itemsPerRow = Int((totalWidth - insets + spacing) / (itemWidth + spacing))
+
+        // Выводим результат в консоль для дебага
+        print("Количество элементов в строке: \(itemsPerRow)")
+        viewModel.updateItemsPerRow(itemsPerRow) // Сообщаем ViewModel об изменении
+    }
+
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        recalculateItemsPerRow()
+    }
 
 }
 

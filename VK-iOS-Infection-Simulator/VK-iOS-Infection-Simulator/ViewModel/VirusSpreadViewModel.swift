@@ -10,6 +10,7 @@ import Combine
 class VirusSpreadViewModel: ObservableObject {
     @Published var people: [Person] = []
     @Published var isSimulationRunning: Bool = false
+    @Published var itemsPerRow: Int = 0 // Добавлено для отслеживания количества элементов в строке
     
     private var simulator: VirusSpreadSimulator?
     private var subscriptions = Set<AnyCancellable>()
@@ -23,6 +24,14 @@ class VirusSpreadViewModel: ObservableObject {
         simulator?.$people
             .receive(on: RunLoop.main)
             .assign(to: &$people)
+        
+        // Внутри VirusSpreadViewModel после инициализации simulator
+        $itemsPerRow
+            .sink { [weak self] itemsPerRow in
+                self?.simulator?.updateLayout(itemsPerRow: itemsPerRow)
+            }
+            .store(in: &subscriptions)
+
     }
     
     
@@ -66,5 +75,10 @@ class VirusSpreadViewModel: ObservableObject {
                 self.statisticsUpdated.send((healthyCount, infectedCount))
             }
         }
+    }
+    
+    func updateItemsPerRow(_ count: Int) {
+        itemsPerRow = count // Обновляем и выводим в консоль количество элементов в строке
+        print("Обновлено количество элементов в строке: \(count)")
     }
 }
