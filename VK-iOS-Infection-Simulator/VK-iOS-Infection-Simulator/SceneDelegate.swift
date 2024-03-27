@@ -15,10 +15,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let parametersViewController = ParametersInputViewController()
-        let navigationController = UINavigationController(rootViewController: parametersViewController) // Обёртка в UINavigationController
+        let navigationController = UINavigationController(rootViewController: parametersViewController)
         
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = navigationController // Использование UINavigationController как корневого контроллера
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
 }

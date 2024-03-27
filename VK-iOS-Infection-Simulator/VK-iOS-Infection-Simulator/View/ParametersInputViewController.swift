@@ -8,46 +8,59 @@
 import UIKit
 import Combine
 
+/// Контроллер ввода параметров для настройки и запуска симуляции распространения вируса.
 class ParametersInputViewController: UIViewController {
+    // MARK: - Private Properties
     private var viewModel: VirusSpreadViewModel = VirusSpreadViewModel()
     private var subscriptions = Set<AnyCancellable>()
     
+    // UI-элементы для ввода пользовательских данных.
     private let groupSizeTextField = UITextField()
     private let infectionFactorTextField = UITextField()
     private let frequencyTextField = UITextField()
     private let startSimulationButton = UIButton(type: .system)
     
+    // MARK: - Lifecycle Methods
+    
+    /// Вызывается после загрузки представления контроллера.
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         setupLayout()
         setupBindings()
 
+        // Подписка на уведомления клавиатуры.
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
-        // Добавление наблюдателей для скрытия клавиатуры при сворачивании приложения или его переходе в фоновый режим
+        // Подписка на уведомления приложения для скрытия клавиатуры.
         NotificationCenter.default.addObserver(self, selector: #selector(dismissKeyboard), name: UIApplication.willResignActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(dismissKeyboard), name: UIApplication.didEnterBackgroundNotification, object: nil)
 
+        // Добавление жеста для скрытия клавиатуры.
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
     }
 
+    /// Скрывает клавиатуру.
     @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
     
+    /// Отписывается от всех уведомлений при деинициализации контроллера.
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
+    
+    // MARK: - Keyboard Observing
+        
+    /// Поднимает представление при появлении клавиатуры, если необходимо.
     @objc private func keyboardWillShow(notification: NSNotification) {
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
             return
         }
         var shouldMoveViewUp = false
 
-        // Если активное текстовое поле есть и клавиатура перекрывает это текстовое поле, то сдвигаем вверх
         let bottomOfTextField = startSimulationButton.convert(startSimulationButton.bounds, to: self.view).maxY;
         let topOfKeyboard = view.frame.height - keyboardSize.height
 
@@ -60,11 +73,14 @@ class ParametersInputViewController: UIViewController {
         }
     }
 
+    /// Возвращает представление на исходную позицию при исчезновении клавиатуры.
     @objc private func keyboardWillHide(notification: NSNotification) {
         self.view.frame.origin.y = 0
     }
 
-
+    // MARK: - Setup Methods
+    
+    /// Настраивает макет UI-компонентов в представлении.
     private func setupLayout() {
         let stackView = UIStackView(arrangedSubviews: [groupSizeTextField, infectionFactorTextField, frequencyTextField, startSimulationButton])
         stackView.axis = .vertical
@@ -72,19 +88,16 @@ class ParametersInputViewController: UIViewController {
         stackView.distribution = .fillEqually
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
-        // Установка стилей для текстовых полей
         [groupSizeTextField, infectionFactorTextField, frequencyTextField].forEach { textField in
             textField.borderStyle = .roundedRect
             textField.heightAnchor.constraint(equalToConstant: 44).isActive = true
             textField.font = UIFont.systemFont(ofSize: 18)
         }
         
-        // Настройки placeholder
         groupSizeTextField.placeholder = "Размер группы"
         infectionFactorTextField.placeholder = "Фактор заражения"
         frequencyTextField.placeholder = "Частота обновления (сек)"
         
-        // Стилизация кнопки
         startSimulationButton.setTitle("Запустить симуляцию", for: .normal)
         startSimulationButton.backgroundColor = .systemBlue
         startSimulationButton.setTitleColor(.white, for: .normal)
@@ -94,7 +107,6 @@ class ParametersInputViewController: UIViewController {
         
         view.addSubview(stackView)
         
-        // Изменение ограничений для размещения элементов у нижнего края view
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
@@ -102,11 +114,14 @@ class ParametersInputViewController: UIViewController {
         ])
     }
 
-    
+    /// Устанавливает привязки между UI-компонентами и моделью представления.
     private func setupBindings() {
         startSimulationButton.addTarget(self, action: #selector(startSimulationTapped), for: .touchUpInside)
     }
     
+    // MARK: - Actions
+    
+    /// Обрабатывает нажатие кнопки "Запустить симуляцию".
     @objc private func startSimulationTapped() {
         dismissKeyboard()
         
@@ -136,15 +151,21 @@ class ParametersInputViewController: UIViewController {
         navigationController?.pushViewController(simulationVC, animated: true)
     }
     
+    // MARK: - Configuration
+    
+    /// Конфигурирует контроллер с помощью модели представления.
+    /// - Parameter viewModel: Модель представления для настройки.
     func configure(with viewModel: VirusSpreadViewModel) {
         self.viewModel = viewModel
     }
     
+    /// Показывает всплывающее окно с предупреждением.
+    /// - Parameters:
+    ///   - title: Заголовок предупреждения.
+    ///   - message: Сообщение предупреждения.
     private func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         self.present(alert, animated: true)
     }
 }
-
-

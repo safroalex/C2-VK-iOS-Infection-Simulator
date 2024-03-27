@@ -8,7 +8,9 @@
 import UIKit
 import Combine
 
+/// Контроллер, отображающий визуализацию симуляции распространения вируса.
 class SimulationViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+    // MARK: - Private Properties
     private var viewModel: VirusSpreadViewModel!
     private var subscriptions = Set<AnyCancellable>()
     private var labelsStackView: UIStackView!
@@ -17,35 +19,37 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
     private let infectedLabel = UILabel()
     private let stopSimulationButton = UIButton(type: .system)
     
+    // MARK: - Lifecycle Methods
+    
+    /// Вызывается после загрузки представления контроллера.
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
         setupBindings()
     }
     
+    // MARK: - Setup Methods
     
-    
+    /// Настраивает макет и внешний вид элементов управления на экране.
     private func setupLayout() {
-        view.backgroundColor = .systemBackground // Для наглядности
+        view.backgroundColor = .systemBackground
         
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 25, height: 25) // Меньший размер ячейки
+        layout.itemSize = CGSize(width: 25, height: 25)
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-
         
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
-        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight] // Автоподгонка размера
+        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = .systemBackground
         collectionView.dataSource = self
         collectionView.delegate = self
         
-        // Регистрация класса ячейки
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         
         view.addSubview(collectionView)
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handleSwipeSelection(_:)))
-        panGesture.maximumNumberOfTouches = 1 // Максимальное количество касаний
+        panGesture.maximumNumberOfTouches = 1
         collectionView.addGestureRecognizer(panGesture)
         
         navigationItem.hidesBackButton = true
@@ -83,22 +87,18 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
         ])
         
         NSLayoutConstraint.activate([
-            // Здоровые слева
             healthyLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             healthyLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
 
-            // Зараженные справа
             infectedLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             infectedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
         ])
 
-        
-        // Начальные значения
         healthyLabel.text = "Здоровых: 0"
         infectedLabel.text = "Зараженных: 0"
-
     }
     
+    /// Устанавливает привязки между элементами управления и моделью представления.
     private func setupBindings() {
         viewModel.$people
             .receive(on: RunLoop.main)
@@ -110,7 +110,6 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
         viewModel.personStatusChanged
             .sink { [weak self] personID in
                 guard let self = self else { return }
-                // Находим индекс измененного Person в массиве people ViewModel, а не Simulator
                 if let index = self.viewModel.people.firstIndex(where: { $0.id == personID }) {
                     let indexPathToUpdate = IndexPath(item: index, section: 0)
                     print("Correcting indexPath to: \(indexPathToUpdate) for personID: \(personID)")
@@ -122,54 +121,63 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
         viewModel.statisticsUpdated
             .receive(on: RunLoop.main)
             .sink { [weak self] healthyCount, infectedCount in
-                // Обновление лейблов с количеством здоровых и больных
                 self?.updateLabels(healthyCount: healthyCount, infectedCount: infectedCount)
             }
             .store(in: &subscriptions)
     }
 
+    // MARK: - Configuration
     
+    /// Конфигурирует контроллер с помощью модели представления.
+    /// - Parameter viewModel: Модель представления для конфигурации.
     func configure(with viewModel: VirusSpreadViewModel) {
         self.viewModel = viewModel
     }
     
+    // MARK: - Actions
+    
+    /// Обработчик нажатия кнопки "Стоп", останавливающий симуляцию и возвращающий пользователя.
     @objc private func stopSimulationTapped() {
         stopSimulation()
         navigationController?.popViewController(animated: true)
     }
     
+    // MARK: - UICollectionViewDataSource
+    
+    /// Возвращает количество элементов в секции коллекции.
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.people.count
     }
     
+    /// Конфигурирует и возвращает ячейку коллекции для указанного индекса пути.
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let personID = viewModel.people[indexPath.row].id
         print("Did select item at \(indexPath), personID: \(personID)")
         viewModel.toggleInfectionStatus(for: personID)
     }
 
-
-
+    // MARK: - UICollectionViewDelegate
+    
+    /// Вызывается при выборе элемента в коллекции.
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
         cell.layer.cornerRadius = 10
         cell.layer.masksToBounds = true
-        cell.backgroundColor = viewModel.people[indexPath.item].isInfected ? .red : .green // Пример визуализации
+        cell.backgroundColor = viewModel.people[indexPath.item].isInfected ? .red : .green
         return cell
     }
     
-
+    // MARK: - Gesture Handling
     
+    /// Обрабатывает жесты панорамирования для выбора ячеек во время движения.
     @objc private func handleSwipeSelection(_ gesture: UIPanGestureRecognizer) {
         let location = gesture.location(in: collectionView)
         
         switch gesture.state {
         case .began, .changed:
             guard let indexPath = collectionView.indexPathForItem(at: location),
-                let cell = collectionView.cellForItem(at: indexPath) else { return }
+            let cell = collectionView.cellForItem(at: indexPath) else { return }
 
-            
-            // Изменение состояния выбранной ячейки, если это необходимо
             let personID = viewModel.people[indexPath.row].id
             if !viewModel.people[indexPath.row].isInfected {
                 viewModel.toggleInfectionStatus(for: personID)
@@ -184,51 +192,49 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
         collectionView.reloadItems(at: [indexPath])
     }
     
+    // MARK: - UI Updates
+    
+    /// Обновляет метки статистики здоровых и зараженных.
     func updateLabels(healthyCount: Int, infectedCount: Int) {
         healthyLabel.text = "Здоровых: \(healthyCount)"
         infectedLabel.text = "Зараженных: \(infectedCount)"
     }
-
+    
+    /// Вычисляет и обновляет количество элементов в строке для корректного отображения коллекции.
     func recalculateItemsPerRow() {
         guard let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
         let totalWidth = collectionView.bounds.size.width
         let itemWidth = layout.itemSize.width
         let spacing = layout.minimumInteritemSpacing
 
-        // Для более точного расчёта учитываем отступы слева и справа
         let insets = layout.sectionInset.left + layout.sectionInset.right
 
-        // Вычисляем количество элементов в строке
         let itemsPerRow = Int((totalWidth - insets + spacing) / (itemWidth + spacing))
 
-        // Выводим результат в консоль для дебага
         print("Количество элементов в строке: \(itemsPerRow)")
-        viewModel.updateItemsPerRow(itemsPerRow) // Сообщаем ViewModel об изменении
+        viewModel.updateItemsPerRow(itemsPerRow)
     }
 
+    /// Вызывается перед настройкой подмножеств представлений.
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         recalculateItemsPerRow()
     }
 
+    /// Останавливает симуляцию и выполняет необходимую очистку.
     func stopSimulation() {
         viewModel.stopSimulation()
     }
     
+    /// Настраивает стиль метки для отображения статистики.
     private func styleLabel(_ label: UILabel) {
-        label.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.8) // Прозрачность фона
+        label.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.8)
         label.textColor = .white
         label.textAlignment = .center
-        label.layer.cornerRadius = 10 // Скругление углов
+        label.layer.cornerRadius = 10
         label.layer.masksToBounds = true
-        label.font = UIFont.systemFont(ofSize: 18, weight: .medium) // Шрифт покрупнее
-        // Установка фиксированных размеров для меток
+        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         label.widthAnchor.constraint(equalToConstant: 120).isActive = true
         label.heightAnchor.constraint(equalToConstant: 40).isActive = true
     }
-
-
-
 }
-
-
