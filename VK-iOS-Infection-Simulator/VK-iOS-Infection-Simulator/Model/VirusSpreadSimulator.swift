@@ -18,6 +18,7 @@ class VirusSpreadSimulator {
     private var infectionFactor: Int
     private var timer: Timer?
     private var frequency: TimeInterval = 1.0
+    private var currentItemsPerRow: Int? // Хранение текущего значения
     
     init(groupSize: Int, infectionFactor: Int) {
         self.infectionFactor = infectionFactor
@@ -26,11 +27,13 @@ class VirusSpreadSimulator {
 
     
     func startSimulation(frequency: TimeInterval) {
-        self.frequency = frequency // Обновляем значение частоты
-        print("Симуляция началась в VirusSpreadSimulator с частотой \(frequency)")
-        timer?.invalidate() // Останавливаем текущий таймер, если он уже работает
+        self.frequency = frequency
+        print("Симуляция началась с частотой \(frequency) и фактором \(infectionFactor)")
+        timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: frequency, repeats: true) { [weak self] _ in
-            self?.spreadInfection()
+            // Проверяем, что значение itemsPerRow уже установлено
+            guard let self = self, let itemsPerRow = self.currentItemsPerRow else { return }
+            self.spreadInfection()
         }
     }
 
@@ -64,6 +67,7 @@ class VirusSpreadSimulator {
 
 
 
+
     func toggleInfectionStatus(for personID: UUID) {
         guard let index = people.firstIndex(where: { $0.id == personID }) else { return }
         if !people[index].isInfected {
@@ -91,9 +95,12 @@ class VirusSpreadSimulator {
     }
     
     func updateLayout(itemsPerRow: Int) {
-        // Логика обновления с учетом нового количества элементов в строке
-        print("Кол во строк из VirusSpreadSimulator: \(itemsPerRow)")
+        print("Кол-во элементов в строке: \(itemsPerRow)")
+        self.currentItemsPerRow = itemsPerRow // Сохраняем текущее значение
+        // Немедленное использование нового значения для расчёта заражений
+//        spreadInfection(itemsPerRow: itemsPerRow)
     }
+
     
     func stopSimulation() {
         timer?.invalidate()
