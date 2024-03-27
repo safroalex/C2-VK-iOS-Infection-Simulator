@@ -44,23 +44,25 @@ class VirusSpreadSimulator {
         for (index, person) in people.enumerated() {
             guard person.isInfected else { continue }
             
-            // Определяем индексы соседей
             let neighborsIndexes = getNeighborsIndex(for: index, in: itemsPerRow)
-            
-            // Фильтруем, чтобы заразить только незараженных соседей
             let infectableNeighbors = neighborsIndexes.filter { !people[$0].isInfected }
             
-            // Выбираем случайное количество соседей для заражения, не превышающее infectionFactor
-            for i in infectableNeighbors.shuffled().prefix(infectionFactor) {
-                newInfections.append(i)
+            // Определение случайного количества соседей для заражения
+            let infectionsLimit = min(infectionFactor, infectableNeighbors.count)
+            if infectionsLimit > 0 {
+                let randomInfectionsCount = Int.random(in: 1...infectionsLimit)
+                for i in infectableNeighbors.shuffled().prefix(randomInfectionsCount) {
+                    newInfections.append(i)
+                }
             }
         }
 
-        // Заражаем новых людей
+        // Заражение новых людей
         for index in newInfections {
             people[index].isInfected = true
         }
     }
+
     
     private func getNeighborsIndex(for index: Int, in itemsPerRow: Int) -> [Int] {
         let totalItems = people.count
