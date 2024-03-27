@@ -15,7 +15,8 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
     private var collectionView: UICollectionView!
     private let healthyLabel = UILabel()
     private let infectedLabel = UILabel()
-
+    private let stopSimulationButton = UIButton(type: .system)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
@@ -47,10 +48,19 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
         panGesture.maximumNumberOfTouches = 1 // Максимальное количество касаний
         collectionView.addGestureRecognizer(panGesture)
         
-        
+        navigationItem.hidesBackButton = true
+
         healthyLabel.translatesAutoresizingMaskIntoConstraints = false
         infectedLabel.translatesAutoresizingMaskIntoConstraints = false
         
+        stopSimulationButton.setTitle("Стоп", for: .normal)
+        stopSimulationButton.backgroundColor = .systemRed
+        stopSimulationButton.setTitleColor(.white, for: .normal)
+        stopSimulationButton.layer.cornerRadius = 10
+        stopSimulationButton.translatesAutoresizingMaskIntoConstraints = false
+        stopSimulationButton.addTarget(self, action: #selector(stopSimulationTapped), for: .touchUpInside)
+        
+        view.addSubview(stopSimulationButton)
         view.addSubview(healthyLabel)
         view.addSubview(infectedLabel)
         
@@ -61,6 +71,13 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
             
             infectedLabel.topAnchor.constraint(equalTo: healthyLabel.bottomAnchor, constant: 10),
             infectedLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
+        ])
+        
+        NSLayoutConstraint.activate([
+            stopSimulationButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stopSimulationButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            stopSimulationButton.widthAnchor.constraint(equalToConstant: 200),
+            stopSimulationButton.heightAnchor.constraint(equalToConstant: 50)
         ])
         
         // Начальные значения
@@ -101,6 +118,11 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
     
     func configure(with viewModel: VirusSpreadViewModel) {
         self.viewModel = viewModel
+    }
+    
+    @objc private func stopSimulationTapped() {
+        stopSimulation()
+        navigationController?.popViewController(animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -174,6 +196,10 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         recalculateItemsPerRow()
+    }
+
+    func stopSimulation() {
+        viewModel.stopSimulation()
     }
 
 }

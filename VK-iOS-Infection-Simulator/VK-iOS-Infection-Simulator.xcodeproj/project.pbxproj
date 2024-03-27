@@ -42,7 +42,7 @@
 		1F0DF0662BAE2B8700689E05 /* ParametersInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersInputViewController.swift; sourceTree = "<group>"; };
 		1F0DF0682BAE2B9A00689E05 /* SimulationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationViewController.swift; sourceTree = "<group>"; };
 		1F0DF06A2BAE2C0400689E05 /* VirusSpreadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirusSpreadViewModel.swift; sourceTree = "<group>"; };
-		1FABE1C82BAD9B3C0091C4BE /* VK-iOS-Infection-Simulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "VK-iOS-Infection-Simulator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FABE1C82BAD9B3C0091C4BE /* Infection.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Infection.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FABE1CB2BAD9B3C0091C4BE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1FABE1CD2BAD9B3C0091C4BE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		1FABE1D42BAD9B3D0091C4BE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -118,7 +118,7 @@
 		1FABE1C92BAD9B3C0091C4BE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1FABE1C82BAD9B3C0091C4BE /* VK-iOS-Infection-Simulator.app */,
+				1FABE1C82BAD9B3C0091C4BE /* Infection.app */,
 				1FABE1DE2BAD9B3D0091C4BE /* VK-iOS-Infection-SimulatorTests.xctest */,
 				1FABE1E82BAD9B3D0091C4BE /* VK-iOS-Infection-SimulatorUITests.xctest */,
 			);
@@ -174,7 +174,7 @@
 			);
 			name = "VK-iOS-Infection-Simulator";
 			productName = "VK-iOS-Infection-Simulator";
-			productReference = 1FABE1C82BAD9B3C0091C4BE /* VK-iOS-Infection-Simulator.app */;
+			productReference = 1FABE1C82BAD9B3C0091C4BE /* Infection.app */;
 			productType = "com.apple.product-type.application";
 		};
 		1FABE1DD2BAD9B3D0091C4BE /* VK-iOS-Infection-SimulatorTests */ = {
@@ -479,7 +479,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "safroalex.VK-iOS-Infection-Simulator";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Infection;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -506,7 +506,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "safroalex.VK-iOS-Infection-Simulator";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Infection;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

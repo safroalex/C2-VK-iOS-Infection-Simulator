@@ -46,8 +46,12 @@ class VirusSpreadViewModel: ObservableObject {
             self?.updateStatistics()
         }
     }
-
     
+    func stopSimulation() {
+        // Остановить таймер и симуляцию здесь
+        simulator?.stopSimulation() // Это предполагает, что у вас есть метод stopSimulation в VirusSpreadSimulator
+        isSimulationRunning = false
+    }    
     
     func toggleInfectionStatus(for personID: UUID) {
         DispatchQueue.global(qos: .userInitiated).async {

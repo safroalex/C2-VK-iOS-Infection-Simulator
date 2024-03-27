@@ -94,6 +94,13 @@ class VirusSpreadSimulator {
         // Логика обновления с учетом нового количества элементов в строке
         print("Кол во строк из VirusSpreadSimulator: \(itemsPerRow)")
     }
+    
+    func stopSimulation() {
+        timer?.invalidate()
+        timer = nil
+        // Любые дополнительные действия по остановке симуляции
+    }
+
 }
 
 
