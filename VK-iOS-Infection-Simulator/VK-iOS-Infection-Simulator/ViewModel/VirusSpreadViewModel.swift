@@ -16,7 +16,7 @@ class VirusSpreadViewModel: ObservableObject {
     private var simulator: VirusSpreadSimulator?
     private var subscriptions = Set<AnyCancellable>()
     private var frequency: TimeInterval = 1.0
-    
+
     /// Публикует изменения статуса заражения конкретного человека.
     var personStatusChanged = PassthroughSubject<UUID, Never>()
     

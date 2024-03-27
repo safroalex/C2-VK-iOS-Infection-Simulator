@@ -20,7 +20,7 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
     private let stopSimulationButton = UIButton(type: .system)
 
     // MARK: - Lifecycle Methods
-    
+
     /// Вызывается после загрузки представления контроллера.
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -158,7 +158,8 @@ class SimulationViewController: UIViewController, UICollectionViewDataSource, UI
     // MARK: - UICollectionViewDelegate
     
     /// Вызывается при выборе элемента в коллекции.
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
         cell.layer.cornerRadius = 10
         cell.layer.masksToBounds = true

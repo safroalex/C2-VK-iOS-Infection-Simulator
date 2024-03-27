@@ -21,7 +21,7 @@ class VirusSpreadSimulator {
     private var timer: Timer?
     private var frequency: TimeInterval = 1.0
     private var currentItemsPerRow: Int?
-    
+
     /// Инициализатор симулятора.
     /// - Parameters:
     ///   - groupSize: Размер группы людей.
@@ -91,7 +91,8 @@ class VirusSpreadSimulator {
                 let neighborColumn = column + j
                 let inLastRow = neighborRow * itemsPerRow >= lastRowFirstIndex
                 
-                let columnCondition = inLastRow ? neighborColumn >= 0 && neighborColumn < itemsInLastRow : neighborColumn >= 0 && neighborColumn < itemsPerRow
+                let columnCondition = inLastRow ? neighborColumn >= 0 && neighborColumn < itemsInLastRow :
+                neighborColumn >= 0 && neighborColumn < itemsPerRow
                 
                 if neighborRow >= 0 && neighborRow <= (totalItems / itemsPerRow) &&
                     columnCondition {

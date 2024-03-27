@@ -19,7 +19,7 @@ class ParametersInputViewController: UIViewController {
     private let infectionFactorTextField = UITextField()
     private let frequencyTextField = UITextField()
     private let startSimulationButton = UIButton(type: .system)
-    
+
     // MARK: - Lifecycle Methods
     
     /// Вызывается после загрузки представления контроллера.
@@ -30,12 +30,16 @@ class ParametersInputViewController: UIViewController {
         setupBindings()
 
         // Подписка на уведомления клавиатуры.
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification, object: nil)
         
         // Подписка на уведомления приложения для скрытия клавиатуры.
-        NotificationCenter.default.addObserver(self, selector: #selector(dismissKeyboard), name: UIApplication.willResignActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(dismissKeyboard), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dismissKeyboard),
+                                               name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dismissKeyboard),
+                                               name: UIApplication.didEnterBackgroundNotification, object: nil)
 
         // Добавление жеста для скрытия клавиатуры.
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -56,7 +60,8 @@ class ParametersInputViewController: UIViewController {
         
     /// Поднимает представление при появлении клавиатуры, если необходимо.
     @objc private func keyboardWillShow(notification: NSNotification) {
-        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey]
+                                  as? NSValue)?.cgRectValue else {
             return
         }
         var shouldMoveViewUp = false
@@ -82,7 +87,8 @@ class ParametersInputViewController: UIViewController {
     
     /// Настраивает макет UI-компонентов в представлении.
     private func setupLayout() {
-        let stackView = UIStackView(arrangedSubviews: [groupSizeTextField, infectionFactorTextField, frequencyTextField, startSimulationButton])
+        let stackView = UIStackView(arrangedSubviews: [groupSizeTextField, infectionFactorTextField,
+                                                       frequencyTextField, startSimulationButton])
         stackView.axis = .vertical
         stackView.spacing = 16
         stackView.distribution = .fillEqually
@@ -133,7 +139,8 @@ class ParametersInputViewController: UIViewController {
         
         guard let infectionFactorText = infectionFactorTextField.text,
               let infectionFactor = Int(infectionFactorText), infectionFactor > 0, infectionFactor <= groupSize else {
-            showAlert(title: "Ошибка ввода", message: "Фактор заражения должен быть положительным числом, не превышающим общее количество людей.")
+            showAlert(title: "Ошибка ввода", message:
+                        "Фактор заражения должен быть положительным числом, не превышающим общее количество людей.")
             return
         }
         
