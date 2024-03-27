@@ -68,6 +68,9 @@ class VirusSpreadSimulator {
         let totalItems = people.count
         let row = index / itemsPerRow
         let column = index % itemsPerRow
+        let lastRowFirstIndex = totalItems - (totalItems % itemsPerRow)
+        let isLastRow = index >= lastRowFirstIndex
+        let itemsInLastRow = totalItems % itemsPerRow
         
         var neighbors: [Int] = []
         for i in -1...1 {
@@ -76,8 +79,13 @@ class VirusSpreadSimulator {
                 
                 let neighborRow = row + i
                 let neighborColumn = column + j
-                if neighborRow >= 0 && neighborRow < (totalItems / itemsPerRow) &&
-                    neighborColumn >= 0 && neighborColumn < itemsPerRow {
+                let inLastRow = neighborRow * itemsPerRow >= lastRowFirstIndex
+                
+                // Условие для проверки допустимости соседнего столбца
+                let columnCondition = inLastRow ? neighborColumn >= 0 && neighborColumn < itemsInLastRow : neighborColumn >= 0 && neighborColumn < itemsPerRow
+                
+                if neighborRow >= 0 && neighborRow <= (totalItems / itemsPerRow) &&
+                    columnCondition {
                     let neighborIndex = neighborRow * itemsPerRow + neighborColumn
                     if neighborIndex >= 0 && neighborIndex < totalItems {
                         neighbors.append(neighborIndex)
@@ -87,6 +95,7 @@ class VirusSpreadSimulator {
         }
         return neighbors
     }
+
 
 
 
